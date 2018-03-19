@@ -50,6 +50,9 @@ class Game {
         // create a built-in "ground" shape
         let ground = BABYLON.MeshBuilder.CreateGround('ground',
             { width: 6, height: 6, subdivisions: 2 }, this.scene);
+
+        // Show debug layer
+        this.scene.debugLayer.show();
     }
 
     run(): void {

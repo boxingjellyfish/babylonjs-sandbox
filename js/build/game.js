@@ -32,6 +32,8 @@ var Game = /** @class */ (function () {
         sphere.position.y = 1;
         // create a built-in "ground" shape
         var ground = BABYLON.MeshBuilder.CreateGround('ground', { width: 6, height: 6, subdivisions: 2 }, this.scene);
+        // Show debug layer
+        this.scene.debugLayer.show();
     };
     Game.prototype.run = function () {
         var _this = this;
