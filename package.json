@@ -21,6 +21,7 @@
   "homepage": "https://github.com/boxingjellyfish/babylonjs-sandbox#readme",
   "dependencies": {
     "babylonjs": "^3.2.0-beta.1",
+    "babylonjs-gui": "^3.2.0-beta.1",
     "concurrently": "^3.5.1",
     "serve": "^6.5.3",
     "systemjs": "^0.21.0",
