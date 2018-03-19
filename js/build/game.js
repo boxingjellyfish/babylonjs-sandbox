@@ -9,6 +9,10 @@ var Game = /** @class */ (function () {
         window.addEventListener("resize", function () {
             _this.engine.resize();
         });
+        // Disable right click
+        this.canvas.oncontextmenu = function (e) {
+            e.preventDefault();
+        };
     }
     Game.prototype.createScene = function () {
         // create a basic BJS Scene object

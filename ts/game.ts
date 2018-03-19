@@ -16,6 +16,11 @@ class Game {
         window.addEventListener("resize", () => {
             this.engine.resize();
         });
+
+        // Disable right click
+        this.canvas.oncontextmenu = function (e) {
+            e.preventDefault();
+        };
     }
 
     createScene(): void {
