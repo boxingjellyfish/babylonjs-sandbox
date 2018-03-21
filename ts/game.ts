@@ -105,6 +105,9 @@ class Game {
         });
         advancedTexture.addControl(button2);
 
+        // Sphere basic animation
+        BABYLON.Animation.CreateAndStartAnimation("SphereScale", sphere, "scaling", 30, 30, new BABYLON.Vector3(1.0, 1.0, 1.0), new BABYLON.Vector3(2.0, 2.0, 2.0));
+
         return scene;
     }
 
