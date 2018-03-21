@@ -32,26 +32,42 @@ class Game {
         // create a FreeCamera, and set its position to (x:0, y:5, z:-10)
         //let camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 5, -10), scene);
         //let camera = new BABYLON.UniversalCamera("UniversalCamera", new BABYLON.Vector3(0, 5, -10), scene);
-        let camera = new BABYLON.ArcRotateCamera("ArcRotateCamera", 0, Math.PI/4, 10, new BABYLON.Vector3(0, 0, 0), scene);
+        let camera = new BABYLON.ArcRotateCamera("ArcRotateCamera", 0, Math.PI / 4, 10, new BABYLON.Vector3(0, 0, 0), scene);
 
         // target the camera to scene origin
-        camera.setTarget(BABYLON.Vector3.Zero());        
+        camera.setTarget(BABYLON.Vector3.Zero());
 
         // attach the camera to the canvas
         camera.attachControl(this.canvas, false);
 
         // create a basic light, aiming 0,1,0 - meaning, to the sky
-        //let light = new BABYLON.HemisphericLight("HemisphericLight", new BABYLON.Vector3(0, 1, 0), scene);
-        let light = new BABYLON.PointLight("pointLight", new BABYLON.Vector3(5, 10, 2), scene);
+        let light = new BABYLON.HemisphericLight("HemisphericLight", new BABYLON.Vector3(0, 1, 0), scene);
+        //let light = new BABYLON.PointLight("PointLight", new BABYLON.Vector3(5, 10, 2), scene);
+
+        // Sphere material creation
+        let sphereMaterial = new BABYLON.StandardMaterial("Material", scene)
+        sphereMaterial.diffuseColor = new BABYLON.Color3(0.5, 0, 0);
+        sphereMaterial.specularColor = new BABYLON.Color3(0.5, 0, 0);
+        //sphereMaterial.emissiveColor = new BABYLON.Color3(0.5, 0, 0);
+        //sphereMaterial.ambientColor = new BABYLON.Color3(0.5, 0, 0);
 
         // create a built-in "sphere" shape; with 16 segments and diameter of 2
         let sphere = BABYLON.MeshBuilder.CreateSphere("Sphere", { segments: 16, diameter: 2 }, scene);
+        sphere.material = sphereMaterial;
 
         // move the sphere upward 1/2 of its height
         sphere.position.y = 1;
 
+        // Ground material creation
+        let groundMaterial = new BABYLON.StandardMaterial("Material", scene)
+        groundMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0.5);
+        groundMaterial.specularColor = new BABYLON.Color3(0, 0, 0.5);
+        //groundMaterial.emissiveColor = new BABYLON.Color3(0, 0, 0.5);
+        groundMaterial.ambientColor = new BABYLON.Color3(0, 0, 0.5);
+
         // create a built-in "ground" shape
         let ground = BABYLON.MeshBuilder.CreateGround("Ground", { width: 6, height: 6, subdivisions: 2 }, scene);
+        ground.material = groundMaterial;
 
         // GUI
         let advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
@@ -95,12 +111,12 @@ class Game {
     createScene2(): BABYLON.Scene {
         // create a basic BJS Scene object
         let scene = new BABYLON.Scene(this.engine);
-        scene.clearColor = new BABYLON.Color4(0.5, 0.5, 0.5, 1);
+        scene.clearColor = new BABYLON.Color4(0.25, 0.25, 0.25, 1);
 
         // create a FreeCamera, and set its position to (x:0, y:5, z:-10)
         //let camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 5, -10), scene);
         //let camera = new BABYLON.UniversalCamera("UniversalCamera", new BABYLON.Vector3(0, 5, -10), scene);
-        let camera = new BABYLON.ArcRotateCamera("ArcRotateCamera", 0, Math.PI/4, 10, new BABYLON.Vector3(0, 0, 0), scene);
+        let camera = new BABYLON.ArcRotateCamera("ArcRotateCamera", 0, Math.PI / 4, 10, new BABYLON.Vector3(0, 0, 0), scene);
 
         // target the camera to scene origin
         camera.setTarget(BABYLON.Vector3.Zero());
@@ -110,16 +126,24 @@ class Game {
 
         // create a basic light, aiming 0,1,0 - meaning, to the sky
         //let light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(1, 1, 1), scene);
-        let light = new BABYLON.PointLight("pointLight", new BABYLON.Vector3(5, 10, 2), scene);
+        let light = new BABYLON.PointLight("PointLight", new BABYLON.Vector3(5, 10, 2), scene);
 
-        // create a built-in "sphere" shape; with 16 segments and diameter of 2
-        let sphere = BABYLON.MeshBuilder.CreateBox("box", { size: 2 }, scene);
+        // Box material creation
+        let boxMaterial = new BABYLON.StandardMaterial("Material", scene)
+        boxMaterial.diffuseColor = new BABYLON.Color3(0, 0.5, 0);
+        boxMaterial.specularColor = new BABYLON.Color3(0, 0.5, 0);
+        //boxMaterial.emissiveColor = new BABYLON.Color3(0, 0.5, 0);
+        //boxMaterial.ambientColor = new BABYLON.Color3(0, 0.5, 0);
 
-        // move the sphere upward 1/2 of its height
-        sphere.position.y = 1;
+        // create a built-in "box" shape
+        let box = BABYLON.MeshBuilder.CreateBox("Box", { size: 2 }, scene);
+        box.material = boxMaterial;
+
+        // move the box upward 1/2 of its height
+        box.position.y = 1;
 
         // create a built-in "ground" shape
-        let ground = BABYLON.MeshBuilder.CreateGround("ground", { width: 6, height: 6, subdivisions: 2 }, scene);
+        let ground = BABYLON.MeshBuilder.CreateGround("Ground", { width: 6, height: 6, subdivisions: 2 }, scene);
 
         // GUI
         let advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
