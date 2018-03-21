@@ -30,26 +30,28 @@ class Game {
         scene.clearColor = new BABYLON.Color4(0, 0, 0, 1);
 
         // create a FreeCamera, and set its position to (x:0, y:5, z:-10)
-        let camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 5, -10), scene);
+        //let camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 5, -10), scene);
+        //let camera = new BABYLON.UniversalCamera("UniversalCamera", new BABYLON.Vector3(0, 5, -10), scene);
+        let camera = new BABYLON.ArcRotateCamera("ArcRotateCamera", 0, Math.PI/4, 10, new BABYLON.Vector3(0, 0, 0), scene);
 
         // target the camera to scene origin
-        camera.setTarget(BABYLON.Vector3.Zero());
+        camera.setTarget(BABYLON.Vector3.Zero());        
 
         // attach the camera to the canvas
         camera.attachControl(this.canvas, false);
 
         // create a basic light, aiming 0,1,0 - meaning, to the sky
-        let light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
-        //this.light = new BABYLON.PointLight("pointLight", new BABYLON.Vector3(1, 10, 1), scene);
+        //let light = new BABYLON.HemisphericLight("HemisphericLight", new BABYLON.Vector3(0, 1, 0), scene);
+        let light = new BABYLON.PointLight("pointLight", new BABYLON.Vector3(5, 10, 2), scene);
 
         // create a built-in "sphere" shape; with 16 segments and diameter of 2
-        let sphere = BABYLON.MeshBuilder.CreateSphere("sphere", { segments: 16, diameter: 2 }, scene);
+        let sphere = BABYLON.MeshBuilder.CreateSphere("Sphere", { segments: 16, diameter: 2 }, scene);
 
         // move the sphere upward 1/2 of its height
         sphere.position.y = 1;
 
         // create a built-in "ground" shape
-        let ground = BABYLON.MeshBuilder.CreateGround("ground", { width: 6, height: 6, subdivisions: 2 }, scene);
+        let ground = BABYLON.MeshBuilder.CreateGround("Ground", { width: 6, height: 6, subdivisions: 2 }, scene);
 
         // GUI
         let advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
@@ -96,7 +98,9 @@ class Game {
         scene.clearColor = new BABYLON.Color4(0.5, 0.5, 0.5, 1);
 
         // create a FreeCamera, and set its position to (x:0, y:5, z:-10)
-        let camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 5, -20), scene);
+        //let camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 5, -10), scene);
+        //let camera = new BABYLON.UniversalCamera("UniversalCamera", new BABYLON.Vector3(0, 5, -10), scene);
+        let camera = new BABYLON.ArcRotateCamera("ArcRotateCamera", 0, Math.PI/4, 10, new BABYLON.Vector3(0, 0, 0), scene);
 
         // target the camera to scene origin
         camera.setTarget(BABYLON.Vector3.Zero());
@@ -105,8 +109,8 @@ class Game {
         camera.attachControl(this.canvas, false);
 
         // create a basic light, aiming 0,1,0 - meaning, to the sky
-        let light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(1, 1, 1), scene);
-        //this.light = new BABYLON.PointLight("pointLight", new BABYLON.Vector3(5, 10, 2), scene);
+        //let light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(1, 1, 1), scene);
+        let light = new BABYLON.PointLight("pointLight", new BABYLON.Vector3(5, 10, 2), scene);
 
         // create a built-in "sphere" shape; with 16 segments and diameter of 2
         let sphere = BABYLON.MeshBuilder.CreateBox("box", { size: 2 }, scene);
