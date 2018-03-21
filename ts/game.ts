@@ -106,7 +106,16 @@ class Game {
         advancedTexture.addControl(button2);
 
         // Sphere basic animation
-        BABYLON.Animation.CreateAndStartAnimation("SphereScale", sphere, "scaling", 30, 30, new BABYLON.Vector3(1.0, 1.0, 1.0), new BABYLON.Vector3(2.0, 2.0, 2.0));
+        let sphereAnimatable = BABYLON.Animation.CreateAndStartAnimation("SphereScale", sphere, "scaling", 30, 30, new BABYLON.Vector3(1.0, 1.0, 1.0), new BABYLON.Vector3(2.0, 2.0, 2.0));
+
+        //When click event is raised
+        window.addEventListener("click", function () {
+            // We try to pick an object
+            let pickResult = scene.pick(scene.pointerX, scene.pointerY);
+            if (pickResult.hit && pickResult.pickedMesh.name == "Sphere") {
+                sphereAnimatable.reset();
+            }
+        });
 
         return scene;
     }
@@ -155,7 +164,7 @@ class Game {
         // create a built-in "ground" shape
         let ground = BABYLON.MeshBuilder.CreateGround("Ground", { width: 6, height: 6, subdivisions: 2 }, scene);
         ground.material = groundMaterial;
-        
+
         // GUI
         let advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
 
@@ -211,10 +220,24 @@ class Game {
         let animationBox = new BABYLON.Animation("myAnimation", "scaling", 30, BABYLON.Animation.ANIMATIONTYPE_VECTOR3, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
         animationBox.setKeys(keys);
 
+        // Creating an easing function
+        let easingFunction = new BABYLON.QuadraticEase();
+        easingFunction.setEasingMode(BABYLON.EasingFunction.EASINGMODE_EASEINOUT);
+        animationBox.setEasingFunction(easingFunction)
+
         box.animations = [];
         box.animations.push(animationBox);
 
-        scene.beginAnimation(box, 0, 60, true);
+        let boxAnimatable = scene.beginAnimation(box, 0, 60, true);
+
+        //When click event is raised
+        window.addEventListener("click", function () {
+            // We try to pick an object
+            let pickResult = scene.pick(scene.pointerX, scene.pointerY);
+            if (pickResult.hit && pickResult.pickedMesh.name == "Box") {
+                boxAnimatable.reset();
+            }
+        });
 
         return scene;
     }

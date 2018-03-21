@@ -87,7 +87,15 @@ var Game = /** @class */ (function () {
         });
         advancedTexture.addControl(button2);
         // Sphere basic animation
-        BABYLON.Animation.CreateAndStartAnimation("SphereScale", sphere, "scaling", 30, 30, new BABYLON.Vector3(1.0, 1.0, 1.0), new BABYLON.Vector3(2.0, 2.0, 2.0));
+        var sphereAnimatable = BABYLON.Animation.CreateAndStartAnimation("SphereScale", sphere, "scaling", 30, 30, new BABYLON.Vector3(1.0, 1.0, 1.0), new BABYLON.Vector3(2.0, 2.0, 2.0));
+        //When click event is raised
+        window.addEventListener("click", function () {
+            // We try to pick an object
+            var pickResult = scene.pick(scene.pointerX, scene.pointerY);
+            if (pickResult.hit && pickResult.pickedMesh.name == "Sphere") {
+                sphereAnimatable.reset();
+            }
+        });
         return scene;
     };
     Game.prototype.createScene2 = function () {
@@ -177,9 +185,21 @@ var Game = /** @class */ (function () {
         });
         var animationBox = new BABYLON.Animation("myAnimation", "scaling", 30, BABYLON.Animation.ANIMATIONTYPE_VECTOR3, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
         animationBox.setKeys(keys);
+        // Creating an easing function
+        var easingFunction = new BABYLON.QuadraticEase();
+        easingFunction.setEasingMode(BABYLON.EasingFunction.EASINGMODE_EASEINOUT);
+        animationBox.setEasingFunction(easingFunction);
         box.animations = [];
         box.animations.push(animationBox);
-        scene.beginAnimation(box, 0, 60, true);
+        var boxAnimatable = scene.beginAnimation(box, 0, 60, true);
+        //When click event is raised
+        window.addEventListener("click", function () {
+            // We try to pick an object
+            var pickResult = scene.pick(scene.pointerX, scene.pointerY);
+            if (pickResult.hit && pickResult.pickedMesh.name == "Box") {
+                boxAnimatable.reset();
+            }
+        });
         return scene;
     };
     Game.prototype.run = function () {
