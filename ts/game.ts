@@ -145,9 +145,17 @@ class Game {
         // move the box upward 1/2 of its height
         box.position.y = 1;
 
+        // Ground material creation
+        let groundMaterial = new BABYLON.StandardMaterial("Material", scene)
+        groundMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0.5);
+        groundMaterial.specularColor = new BABYLON.Color3(0, 0, 0.5);
+        //groundMaterial.emissiveColor = new BABYLON.Color3(0, 0, 0.5);
+        groundMaterial.ambientColor = new BABYLON.Color3(0, 0, 0.5);
+
         // create a built-in "ground" shape
         let ground = BABYLON.MeshBuilder.CreateGround("Ground", { width: 6, height: 6, subdivisions: 2 }, scene);
-
+        ground.material = groundMaterial;
+        
         // GUI
         let advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
 
@@ -183,6 +191,30 @@ class Game {
             }
         });
         advancedTexture.addControl(button2);
+
+        // Box animation
+        // An array with all animation keys
+        let keys = [];
+        keys.push({
+            frame: 0,
+            value: new BABYLON.Vector3(1.0, 1.0, 1.0)
+        });
+        keys.push({
+            frame: 30,
+            value: new BABYLON.Vector3(1.2, 1.2, 1.2)
+        });
+        keys.push({
+            frame: 60,
+            value: new BABYLON.Vector3(1.0, 1.0, 1.0)
+        });
+
+        let animationBox = new BABYLON.Animation("myAnimation", "scaling", 30, BABYLON.Animation.ANIMATIONTYPE_VECTOR3, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
+        animationBox.setKeys(keys);
+
+        box.animations = [];
+        box.animations.push(animationBox);
+
+        scene.beginAnimation(box, 0, 60, true);
 
         return scene;
     }
