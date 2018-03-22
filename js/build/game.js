@@ -52,6 +52,8 @@ var Game = /** @class */ (function () {
         // create a built-in "ground" shape
         var ground = BABYLON.MeshBuilder.CreateGround("Ground", { width: 6, height: 6, subdivisions: 2 }, scene);
         ground.material = groundMaterial;
+        var buttonHoverSound = new BABYLON.Sound("buttonHoverSound", "snd/beep-29.wav", scene);
+        var buttonClickSound = new BABYLON.Sound("buttonClickSound", "snd/button-35.wav", scene);
         // GUI
         var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
         var button1 = BABYLON.GUI.Button.CreateSimpleButton("but1", "Change Scene");
@@ -78,6 +80,7 @@ var Game = /** @class */ (function () {
         button2.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
         button2.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
         button2.onPointerUpObservable.add(function () {
+            buttonClickSound.play();
             if (scene.debugLayer.isVisible()) {
                 scene.debugLayer.hide();
             }
