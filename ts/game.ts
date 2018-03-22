@@ -69,55 +69,21 @@ class Game {
         let ground = BABYLON.MeshBuilder.CreateGround("Ground", { width: 6, height: 6, subdivisions: 2 }, scene);
         ground.material = groundMaterial;
 
-        let buttonHoverSound = new BABYLON.Sound("buttonHoverSound", "snd/beep-29.wav", scene);
-        let buttonClickSound = new BABYLON.Sound("buttonClickSound", "snd/button-35.wav", scene);
-
-        // GUI
-        let advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
-
-        let button1 = BABYLON.GUI.Button.CreateSimpleButton("but1", "Change Scene");
-        button1.width = "220px";
-        button1.height = "40px";
-        button1.color = "white";
-        button1.background = "blue";
-        button1.top = "20px";
-        button1.left = "20px";
-        button1.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
-        button1.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
-        button1.onPointerUpObservable.add(() => {
-            this.scene.dispose();
+        // add gui layer
+        this.createUI(scene, () => {
             this.scene = this.createScene2();
         });
-        advancedTexture.addControl(button1);
-
-        let button2 = BABYLON.GUI.Button.CreateSimpleButton("but2", "Debug");
-        button2.width = "220px";
-        button2.height = "40px";
-        button2.color = "white";
-        button2.background = "orange";
-        button2.top = "-20px";
-        button2.left = "20px";
-        button2.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
-        button2.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
-        button2.onPointerUpObservable.add(() => {
-            buttonClickSound.play();
-            if (scene.debugLayer.isVisible()) {
-                scene.debugLayer.hide();
-            } else {
-                scene.debugLayer.show();
-            }
-        });
-        advancedTexture.addControl(button2);
 
         // Sphere basic animation
-        let sphereAnimatable = BABYLON.Animation.CreateAndStartAnimation("SphereScale", sphere, "scaling", 30, 30, new BABYLON.Vector3(1.0, 1.0, 1.0), new BABYLON.Vector3(2.0, 2.0, 2.0));
+        let sphereAnimatable = BABYLON.Animation.CreateAndStartAnimation("SphereScale", sphere, "scaling", 30, 90, new BABYLON.Vector3(1.0, 1.0, 1.0), new BABYLON.Vector3(2.0, 2.0, 2.0));
+        sphereAnimatable.pause();
 
         //When click event is raised
         window.addEventListener("click", function () {
             // We try to pick an object
             let pickResult = scene.pick(scene.pointerX, scene.pointerY);
             if (pickResult.hit && pickResult.pickedMesh.name == "Sphere") {
-                sphereAnimatable.reset();
+                sphereAnimatable.restart();
             }
         });
 
@@ -169,41 +135,10 @@ class Game {
         let ground = BABYLON.MeshBuilder.CreateGround("Ground", { width: 6, height: 6, subdivisions: 2 }, scene);
         ground.material = groundMaterial;
 
-        // GUI
-        let advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
-
-        let button1 = BABYLON.GUI.Button.CreateSimpleButton("but1", "Change Scene");
-        button1.width = "220px";
-        button1.height = "40px";
-        button1.color = "white";
-        button1.background = "green";
-        button1.top = "20px";
-        button1.left = "-20px";
-        button1.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
-        button1.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
-        button1.onPointerUpObservable.add(() => {
-            this.scene.dispose();
+        // add gui layer
+        this.createUI(scene, () => {
             this.scene = this.createScene1();
         });
-        advancedTexture.addControl(button1);
-
-        let button2 = BABYLON.GUI.Button.CreateSimpleButton("but2", "Debug");
-        button2.width = "220px";
-        button2.height = "40px";
-        button2.color = "white";
-        button2.background = "orange";
-        button2.top = "-20px";
-        button2.left = "20px";
-        button2.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
-        button2.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
-        button2.onPointerUpObservable.add(() => {
-            if (scene.debugLayer.isVisible()) {
-                scene.debugLayer.hide();
-            } else {
-                scene.debugLayer.show();
-            }
-        });
-        advancedTexture.addControl(button2);
 
         // Box animation
         // An array with all animation keys
@@ -244,6 +179,53 @@ class Game {
         });
 
         return scene;
+    }
+
+    createUI(scene: BABYLON.Scene, onChangeScene: () => void): void {
+        let advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+
+        let buttonHoverSound = new BABYLON.Sound("buttonHoverSound", "snd/beep-29.wav", scene);
+        let buttonClickSound = new BABYLON.Sound("buttonClickSound", "snd/button-35.wav", scene);
+
+        let button1 = BABYLON.GUI.Button.CreateSimpleButton("but1", "Change Scene");
+        button1.width = "220px";
+        button1.height = "40px";
+        button1.color = "white";
+        button1.background = "blue";
+        button1.top = "20px";
+        button1.left = "20px";
+        button1.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
+        button1.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+        button1.onPointerUpObservable.add(() => {
+            this.scene.dispose();
+            onChangeScene();
+        });
+        button1.onPointerEnterObservable.add(() => {
+            buttonHoverSound.play();
+        });
+        advancedTexture.addControl(button1);
+
+        let button2 = BABYLON.GUI.Button.CreateSimpleButton("but2", "Debug");
+        button2.width = "220px";
+        button2.height = "40px";
+        button2.color = "white";
+        button2.background = "orange";
+        button2.top = "-20px";
+        button2.left = "20px";
+        button2.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
+        button2.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
+        button2.onPointerUpObservable.add(() => {
+            buttonClickSound.play();
+            if (scene.debugLayer.isVisible()) {
+                scene.debugLayer.hide();
+            } else {
+                scene.debugLayer.show();
+            }
+        });
+        button2.onPointerEnterObservable.add(() => {
+            buttonHoverSound.play();
+        });
+        advancedTexture.addControl(button2);
     }
 
     run(): void {
