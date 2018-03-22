@@ -197,8 +197,11 @@ class Game {
         button1.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
         button1.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
         button1.onPointerUpObservable.add(() => {
-            this.scene.dispose();
-            onChangeScene();
+            buttonClickSound.play();
+            var handle = window.setTimeout(() => {
+                this.scene.dispose();
+                onChangeScene();
+            }, 200);
         });
         button1.onPointerEnterObservable.add(() => {
             buttonHoverSound.play();
