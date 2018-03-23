@@ -17,7 +17,6 @@ var Game = /** @class */ (function () {
         this.scene = this.createScene1();
     }
     Game.prototype.createScene1 = function () {
-        var _this = this;
         // create a basic BJS Scene object
         var scene = new BABYLON.Scene(this.engine);
         scene.clearColor = new BABYLON.Color4(0, 0, 0, 1);
@@ -53,9 +52,7 @@ var Game = /** @class */ (function () {
         var ground = BABYLON.MeshBuilder.CreateGround("Ground", { width: 6, height: 6, subdivisions: 2 }, scene);
         ground.material = groundMaterial;
         // add gui layer
-        this.createUI(scene, function () {
-            _this.scene = _this.createScene2();
-        });
+        this.createUI(scene);
         // Sphere basic animation
         var sphereAnimatable = BABYLON.Animation.CreateAndStartAnimation("SphereScale", sphere, "scaling", 30, 90, new BABYLON.Vector3(1.0, 1.0, 1.0), new BABYLON.Vector3(2.0, 2.0, 2.0));
         sphereAnimatable.pause();
@@ -70,7 +67,6 @@ var Game = /** @class */ (function () {
         return scene;
     };
     Game.prototype.createScene2 = function () {
-        var _this = this;
         // create a basic BJS Scene object
         var scene = new BABYLON.Scene(this.engine);
         scene.clearColor = new BABYLON.Color4(0.25, 0.25, 0.25, 1);
@@ -106,9 +102,7 @@ var Game = /** @class */ (function () {
         var ground = BABYLON.MeshBuilder.CreateGround("Ground", { width: 6, height: 6, subdivisions: 2 }, scene);
         ground.material = groundMaterial;
         // add gui layer
-        this.createUI(scene, function () {
-            _this.scene = _this.createScene1();
-        });
+        this.createUI(scene);
         // Box animation
         // An array with all animation keys
         var keys = [];
@@ -143,41 +137,67 @@ var Game = /** @class */ (function () {
         });
         return scene;
     };
-    Game.prototype.createUI = function (scene, onChangeScene) {
+    Game.prototype.createUI = function (scene) {
         var _this = this;
         var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
         var buttonHoverSound = new BABYLON.Sound("buttonHoverSound", "snd/beep-29.wav", scene);
         var buttonClickSound = new BABYLON.Sound("buttonClickSound", "snd/button-35.wav", scene);
-        var button1 = BABYLON.GUI.Button.CreateSimpleButton("but1", "Change Scene");
-        button1.width = "220px";
-        button1.height = "40px";
-        button1.color = "white";
-        button1.background = "blue";
-        button1.top = "20px";
-        button1.left = "20px";
-        button1.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
-        button1.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
-        button1.onPointerUpObservable.add(function () {
+        var btnScene1 = BABYLON.GUI.Button.CreateSimpleButton("btnScene1", "S1");
+        btnScene1.width = "100px";
+        btnScene1.height = "40px";
+        btnScene1.color = "white";
+        btnScene1.background = "grey";
+        btnScene1.top = "20px";
+        btnScene1.left = "20px";
+        btnScene1.fontFamily = "Share Tech Mono";
+        //btnScene1.fontFamily = "Nova Mono";
+        btnScene1.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
+        btnScene1.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+        btnScene1.onPointerUpObservable.add(function () {
             buttonClickSound.play();
             var handle = window.setTimeout(function () {
                 _this.scene.dispose();
-                onChangeScene();
+                _this.scene = _this.createScene1();
             }, 200);
         });
-        button1.onPointerEnterObservable.add(function () {
+        btnScene1.onPointerEnterObservable.add(function () {
             buttonHoverSound.play();
         });
-        advancedTexture.addControl(button1);
-        var button2 = BABYLON.GUI.Button.CreateSimpleButton("but2", "Debug");
-        button2.width = "220px";
-        button2.height = "40px";
-        button2.color = "white";
-        button2.background = "orange";
-        button2.top = "-20px";
-        button2.left = "20px";
-        button2.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
-        button2.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
-        button2.onPointerUpObservable.add(function () {
+        advancedTexture.addControl(btnScene1);
+        var btnScene2 = BABYLON.GUI.Button.CreateSimpleButton("btnScene2", "S2");
+        btnScene2.width = "100px";
+        btnScene2.height = "40px";
+        btnScene2.color = "white";
+        btnScene2.background = "grey";
+        btnScene2.top = "20px";
+        btnScene2.left = "140px";
+        btnScene2.fontFamily = "Share Tech Mono";
+        //btnScene2.fontFamily = "Nova Mono";
+        btnScene2.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
+        btnScene2.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+        btnScene2.onPointerUpObservable.add(function () {
+            buttonClickSound.play();
+            var handle = window.setTimeout(function () {
+                _this.scene.dispose();
+                _this.scene = _this.createScene2();
+            }, 200);
+        });
+        btnScene2.onPointerEnterObservable.add(function () {
+            buttonHoverSound.play();
+        });
+        advancedTexture.addControl(btnScene2);
+        var btnDebug = BABYLON.GUI.Button.CreateSimpleButton("btnDebug", "Debug");
+        btnDebug.width = "100px";
+        btnDebug.height = "40px";
+        btnDebug.color = "white";
+        btnDebug.background = "grey";
+        btnDebug.top = "-20px";
+        btnDebug.left = "20px";
+        btnDebug.fontFamily = "Share Tech Mono";
+        //btnDebug.fontFamily = "Nova Mono";
+        btnDebug.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
+        btnDebug.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
+        btnDebug.onPointerUpObservable.add(function () {
             buttonClickSound.play();
             if (scene.debugLayer.isVisible()) {
                 scene.debugLayer.hide();
@@ -186,10 +206,10 @@ var Game = /** @class */ (function () {
                 scene.debugLayer.show();
             }
         });
-        button2.onPointerEnterObservable.add(function () {
+        btnDebug.onPointerEnterObservable.add(function () {
             buttonHoverSound.play();
         });
-        advancedTexture.addControl(button2);
+        advancedTexture.addControl(btnDebug);
     };
     Game.prototype.run = function () {
         var _this = this;
