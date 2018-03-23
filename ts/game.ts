@@ -70,9 +70,7 @@ class Game {
         ground.material = groundMaterial;
 
         // add gui layer
-        this.createUI(scene, () => {
-            this.scene = this.createScene2();
-        });
+        this.createUI(scene);
 
         // Sphere basic animation
         let sphereAnimatable = BABYLON.Animation.CreateAndStartAnimation("SphereScale", sphere, "scaling", 30, 90, new BABYLON.Vector3(1.0, 1.0, 1.0), new BABYLON.Vector3(2.0, 2.0, 2.0));
@@ -136,9 +134,7 @@ class Game {
         ground.material = groundMaterial;
 
         // add gui layer
-        this.createUI(scene, () => {
-            this.scene = this.createScene1();
-        });
+        this.createUI(scene);
 
         // Box animation
         // An array with all animation keys
@@ -181,43 +177,70 @@ class Game {
         return scene;
     }
 
-    createUI(scene: BABYLON.Scene, onChangeScene: () => void): void {
+    createUI(scene: BABYLON.Scene): void {
         let advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
 
         let buttonHoverSound = new BABYLON.Sound("buttonHoverSound", "snd/beep-29.wav", scene);
         let buttonClickSound = new BABYLON.Sound("buttonClickSound", "snd/button-35.wav", scene);
 
-        let button1 = BABYLON.GUI.Button.CreateSimpleButton("but1", "Change Scene");
-        button1.width = "220px";
-        button1.height = "40px";
-        button1.color = "white";
-        button1.background = "blue";
-        button1.top = "20px";
-        button1.left = "20px";
-        button1.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
-        button1.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
-        button1.onPointerUpObservable.add(() => {
+        let btnScene1 = BABYLON.GUI.Button.CreateSimpleButton("btnScene1", "S1");
+        btnScene1.width = "100px";
+        btnScene1.height = "40px";
+        btnScene1.color = "white";
+        btnScene1.background = "grey";
+        btnScene1.top = "20px";
+        btnScene1.left = "20px";
+        btnScene1.fontFamily = "Share Tech Mono";
+        //btnScene1.fontFamily = "Nova Mono";
+        btnScene1.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
+        btnScene1.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+        btnScene1.onPointerUpObservable.add(() => {
             buttonClickSound.play();
             var handle = window.setTimeout(() => {
                 this.scene.dispose();
-                onChangeScene();
+                this.scene = this.createScene1();
             }, 200);
         });
-        button1.onPointerEnterObservable.add(() => {
+        btnScene1.onPointerEnterObservable.add(() => {
             buttonHoverSound.play();
         });
-        advancedTexture.addControl(button1);
+        advancedTexture.addControl(btnScene1);
 
-        let button2 = BABYLON.GUI.Button.CreateSimpleButton("but2", "Debug");
-        button2.width = "220px";
-        button2.height = "40px";
-        button2.color = "white";
-        button2.background = "orange";
-        button2.top = "-20px";
-        button2.left = "20px";
-        button2.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
-        button2.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
-        button2.onPointerUpObservable.add(() => {
+        let btnScene2 = BABYLON.GUI.Button.CreateSimpleButton("btnScene2", "S2");
+        btnScene2.width = "100px";
+        btnScene2.height = "40px";
+        btnScene2.color = "white";
+        btnScene2.background = "grey";
+        btnScene2.top = "20px";
+        btnScene2.left = "140px";
+        btnScene2.fontFamily = "Share Tech Mono";
+        //btnScene2.fontFamily = "Nova Mono";
+        btnScene2.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
+        btnScene2.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+        btnScene2.onPointerUpObservable.add(() => {
+            buttonClickSound.play();
+            var handle = window.setTimeout(() => {
+                this.scene.dispose();
+                this.scene = this.createScene2();
+            }, 200);
+        });
+        btnScene2.onPointerEnterObservable.add(() => {
+            buttonHoverSound.play();
+        });
+        advancedTexture.addControl(btnScene2);
+
+        let btnDebug = BABYLON.GUI.Button.CreateSimpleButton("btnDebug", "Debug");
+        btnDebug.width = "100px";
+        btnDebug.height = "40px";
+        btnDebug.color = "white";
+        btnDebug.background = "grey";
+        btnDebug.top = "-20px";
+        btnDebug.left = "20px";
+        btnDebug.fontFamily = "Share Tech Mono";
+        //btnDebug.fontFamily = "Nova Mono";
+        btnDebug.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
+        btnDebug.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
+        btnDebug.onPointerUpObservable.add(() => {
             buttonClickSound.play();
             if (scene.debugLayer.isVisible()) {
                 scene.debugLayer.hide();
@@ -225,10 +248,10 @@ class Game {
                 scene.debugLayer.show();
             }
         });
-        button2.onPointerEnterObservable.add(() => {
+        btnDebug.onPointerEnterObservable.add(() => {
             buttonHoverSound.play();
         });
-        advancedTexture.addControl(button2);
+        advancedTexture.addControl(btnDebug);
     }
 
     run(): void {
