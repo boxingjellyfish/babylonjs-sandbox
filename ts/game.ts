@@ -177,11 +177,156 @@ class Game {
         return scene;
     }
 
+    createScene3(): BABYLON.Scene {
+        let scene = new BABYLON.Scene(this.engine);
+        scene.clearColor = new BABYLON.Color4(0, 0, 0, 1);
+        let camera = new BABYLON.ArcRotateCamera("ArcRotateCamera", 0, Math.PI / 4, 100, new BABYLON.Vector3(0, 0, 0), scene);
+        camera.setTarget(BABYLON.Vector3.Zero());
+        camera.attachControl(this.canvas, false);
+        let light = new BABYLON.PointLight("PointLight", new BABYLON.Vector3(5, 10, 2), scene);
+
+        // Map material creation
+        let polygonMaterial = new BABYLON.StandardMaterial("Material", scene)
+        polygonMaterial.diffuseColor = new BABYLON.Color3(0, 0.9, 0);
+        polygonMaterial.specularColor = new BABYLON.Color3(0, 0.9, 0);
+
+        let map = {
+            id: "default",
+            regions: [
+                {
+                    id: "n_america",
+                    territories: [
+                        {
+                            id: "alaska",
+                            borders: [
+                                { x: 11, y: 9 },
+                                { x: 13, y: 8 },
+                                { x: 13, y: 5 },
+                                { x: 19, y: 2 },
+                                { x: 19, y: 4 },
+                                { x: 17, y: 5 },
+                                { x: 17, y: 10 },
+                                { x: 19, y: 11 },
+                                { x: 19, y: 15 },
+                                { x: 17, y: 14 },
+                                { x: 15, y: 15 },
+                                { x: 15, y: 18 },
+                                { x: 11, y: 20 },
+                                { x: 11, y: 9 }
+                            ]
+                        },
+                        {
+                            id: "mackenzie",
+                            borders: [
+                                { x: 11, y: 20 },
+                                { x: 15, y: 18 },
+                                { x: 15, y: 15 },
+                                { x: 17, y: 14 },
+                                { x: 19, y: 15 },
+                                { x: 19, y: 22 },
+                                { x: 21, y: 23 },
+                                { x: 21, y: 35 },
+                                { x: 19, y: 36 },
+                                { x: 19, y: 40 },
+                                { x: 17, y: 41 },
+                                { x: 17, y: 45 },
+                                { x: 15, y: 44 },
+                                { x: 15, y: 42 },
+                                { x: 13, y: 41 },
+                                { x: 15, y: 40 },
+                                { x: 15, y: 31 },
+                                { x: 13, y: 30 },
+                                { x: 13, y: 21 },
+                                { x: 11, y: 20 }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        };
+
+        for (let region of map.regions) {
+            for (let territory of region.territories) {
+                let shape = [];
+                for (let border of territory.borders) {
+                    shape.push(new BABYLON.Vector3(border.x, 0, border.y))
+                }
+                shape.push(new BABYLON.Vector3(territory.borders[0].x, 0, territory.borders[0].y))
+                //let polygon = BABYLON.MeshBuilder.CreatePolygon(territory.id + "Polygon", { shape: shape, sideOrientation: BABYLON.Mesh.DOUBLESIDE }, scene);
+                //polygon.material = polygonMaterial;
+                let lines = BABYLON.MeshBuilder.CreateLines(territory.id + "Lines", { points: shape, updatable: false, instance: null }, scene);
+                lines.color = new BABYLON.Color3(0, 0.3, 0);
+            }
+        }
+
+        /*
+        let alaskaShape = [
+            new BABYLON.Vector3(11, 0, 9),
+            new BABYLON.Vector3(13, 0, 8),
+            new BABYLON.Vector3(13, 0, 5),
+            new BABYLON.Vector3(19, 0, 2),
+            new BABYLON.Vector3(19, 0, 4),
+            new BABYLON.Vector3(17, 0, 5),
+            new BABYLON.Vector3(17, 0, 10),
+            new BABYLON.Vector3(19, 0, 11),
+            new BABYLON.Vector3(19, 0, 15),
+            new BABYLON.Vector3(17, 0, 14),
+            new BABYLON.Vector3(15, 0, 15),
+            new BABYLON.Vector3(15, 0, 18),
+            new BABYLON.Vector3(11, 0, 20),
+            new BABYLON.Vector3(11, 0, 9)
+        ];
+        //let alaskaPolygon = BABYLON.MeshBuilder.CreatePolygon("alaskaPolygon", { shape: alaskaShape, sideOrientation: BABYLON.Mesh.DOUBLESIDE }, scene);
+        //alaskaPolygon.material = polygonMaterial;
+        let alaskaLines = BABYLON.MeshBuilder.CreateLines("alaskaLines", { points: alaskaShape, updatable: false, instance: null }, scene);
+        alaskaLines.color = new BABYLON.Color3(0, 0.3, 0);
+
+        alaskaLines.enableEdgesRendering();
+        alaskaLines.edgesWidth = 10.0;
+        alaskaLines.edgesColor = new BABYLON.Color4(0, 0.3, 0, 1);
+
+        let mackenzieShape = [
+            new BABYLON.Vector3(11, 0, 20),
+            new BABYLON.Vector3(15, 0, 18),
+            new BABYLON.Vector3(15, 0, 15),
+            new BABYLON.Vector3(17, 0, 14),
+            new BABYLON.Vector3(19, 0, 15),
+            new BABYLON.Vector3(19, 0, 22),
+            new BABYLON.Vector3(21, 0, 23),
+            new BABYLON.Vector3(21, 0, 35),
+            new BABYLON.Vector3(19, 0, 36),
+            new BABYLON.Vector3(19, 0, 40),
+            new BABYLON.Vector3(17, 0, 41),
+            new BABYLON.Vector3(17, 0, 45),
+            new BABYLON.Vector3(15, 0, 44),
+            new BABYLON.Vector3(15, 0, 42),
+            new BABYLON.Vector3(13, 0, 41),
+            new BABYLON.Vector3(15, 0, 40),
+            new BABYLON.Vector3(15, 0, 31),
+            new BABYLON.Vector3(13, 0, 30),
+            new BABYLON.Vector3(13, 0, 21),
+            new BABYLON.Vector3(11, 0, 20)
+        ];
+        let mackenziePolygon = BABYLON.MeshBuilder.CreatePolygon("mackenziePolygon", { shape: mackenzieShape, sideOrientation: BABYLON.Mesh.DOUBLESIDE }, scene);
+        mackenziePolygon.material = polygonMaterial;
+        let mackenzieLines = BABYLON.MeshBuilder.CreateLines("mackenzieLines", { points: mackenzieShape, updatable: false, instance: null }, scene);
+        mackenzieLines.color = new BABYLON.Color3(0, 0.3, 0);
+
+        mackenzieLines.enableEdgesRendering();
+        mackenzieLines.edgesWidth = 10.0;
+        mackenzieLines.edgesColor = new BABYLON.Color4(0, 0.3, 0, 1);
+        */
+
+        this.createUI(scene);
+
+        return scene;
+    }
+
     createUI(scene: BABYLON.Scene): void {
         let advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
 
-        let buttonHoverSound = new BABYLON.Sound("buttonHoverSound", "snd/beep-29.wav", scene);
-        let buttonClickSound = new BABYLON.Sound("buttonClickSound", "snd/button-35.wav", scene);
+        let buttonHoverSound = new BABYLON.Sound("buttonHoverSound", "audio/beep-29.wav", scene);
+        let buttonClickSound = new BABYLON.Sound("buttonClickSound", "audio/button-35.wav", scene);
 
         let btnScene1 = BABYLON.GUI.Button.CreateSimpleButton("btnScene1", "S1");
         btnScene1.width = "100px";
@@ -228,6 +373,29 @@ class Game {
             buttonHoverSound.play();
         });
         advancedTexture.addControl(btnScene2);
+
+        let btnScene3 = BABYLON.GUI.Button.CreateSimpleButton("btnScene3", "S3");
+        btnScene3.width = "100px";
+        btnScene3.height = "40px";
+        btnScene3.color = "white";
+        btnScene3.background = "grey";
+        btnScene3.top = "20px";
+        btnScene3.left = "260px";
+        btnScene3.fontFamily = "Share Tech Mono";
+        //btnScene3.fontFamily = "Nova Mono";
+        btnScene3.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
+        btnScene3.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+        btnScene3.onPointerUpObservable.add(() => {
+            buttonClickSound.play();
+            var handle = window.setTimeout(() => {
+                this.scene.dispose();
+                this.scene = this.createScene3();
+            }, 200);
+        });
+        btnScene3.onPointerEnterObservable.add(() => {
+            buttonHoverSound.play();
+        });
+        advancedTexture.addControl(btnScene3);
 
         let btnDebug = BABYLON.GUI.Button.CreateSimpleButton("btnDebug", "Debug");
         btnDebug.width = "100px";
